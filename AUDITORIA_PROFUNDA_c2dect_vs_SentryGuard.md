@@ -1,4 +1,4 @@
-# AUDITORÍA DE PROFUNDIDAD — `c2-dect` vs `SentryGuard-0.0.1`
+# AUDITORÍA DE PROFUNDIDAD - `c2-dect` vs `SentryGuard-0.0.1`
 
 **Fecha:** 2026-11-10 · **Método:** revisión estática + verificación ejecutable (8 agentes de auditoría en paralelo + pruebas empíricas propias con los binarios reales de ambos proyectos).
 
@@ -15,9 +15,9 @@
 | | c2-dect (ofensivo) | SentryGuard-0.0.1 (defensivo) |
 |---|---|---|
 | **Compila** | ✅ `go build ./cmd/server/` y `./cmd/agent_go/` OK · `go vet` limpio | ✅ `dotnet build` 0 errores, 6 warnings · `cargo check` OK (34 warnings) |
-| **Tests** | parciales (216 capacidades auto-sondeadas; 100 `real-ejecutada`, 30 `simulada`, 53 `no-disponible`) | ✅ 69/69 pasan — pero **no cubren ninguna detección** (ver §3.7) |
+| **Tests** | parciales (216 capacidades auto-sondeadas; 100 `real-ejecutada`, 30 `simulada`, 53 `no-disponible`) | ✅ 69/69 pasan - pero **no cubren ninguna detección** (ver §3.7) |
 | **Es real** | **Sí, a medias.** El agente Go es un arsenal real. El servidor es un simulador grande. | **No.** El motor de reglas es real; la *plataforma* que lo alimenta no existe. |
-| **¿Puede defenderse?** | — | **NO.** Tres bloqueos independientes, cada uno suficiente. |
+| **¿Puede defenderse?** | - | **NO.** Tres bloqueos independientes, cada uno suficiente. |
 
 ### La respuesta a «¿puede SentryGuard defender?»
 
@@ -43,7 +43,7 @@
 | `go vet ./...` en `c2-dect/server` | ✅ EXIT=0 |
 | **YARA de SentryGuard sobre el binario real del agente c2-dect** | ⚠️ **55 matches en 328.008 ms** (5,5 min para un solo fichero de 16 MB) |
 | **Purple-team benigno** (`notepad.exe notes.txt`, `WINWORD.EXE document.docx`) | 🔴 **14 detecciones, 2× CRITICAL score=650** por abrir un bloc de notas |
-| **Purple-team c2-dect real** (11 eventos con artefactos reales del agente) | 🟡 36 detecciones — acierta en persistencia/servicio, **falla en registro, fichero, red y DNS** |
+| **Purple-team c2-dect real** (11 eventos con artefactos reales del agente) | 🟡 36 detecciones - acierta en persistencia/servicio, **falla en registro, fichero, red y DNS** |
 | **Regla `T1547_New_RUN_Key_Pointing_to_Suspicious_Folder`** (la que debería cazar la persistencia de c2-dect) | 🔴 **Cargada, aplicable bajo canal `Security`, pero `"enabled": false` → nunca dispara.** Aislando cada hoja: **ambas hojas sí matchean**. Es la闸门 la que está cerrada. |
 
 ### 1.1 Purple-team: dos eventos benignos, 14 detecciones
@@ -84,7 +84,7 @@ Eventos sintetizados desde los artefactos literales del agente (`cmd/agent_go/`)
 
 **Detección real: 3 de 11.** Las 3 son coincidencia de patrón genérico, no cobertura diseñada.
 
-### 1.3 YARA contra el binario real de c2-dect — y el problema de rendimiento
+### 1.3 YARA contra el binario real de c2-dect - y el problema de rendimiento
 
 El motor YARA **sí** encuentra cosas en el binario real del agente (55 matches: `Rubeus Credentials`, `Sharphound Credentials`, `Mal Zip Socgholish`, `Expl Keepass`, `Powershell In Word Doc`…). Pero:
 
@@ -95,7 +95,7 @@ El motor YARA **sí** encuentra cosas en el binario real del agente (55 matches:
 
 ---
 
-## 2. c2-dect — AUDITORÍA OFENSIVA
+## 2. c2-dect - AUDITORÍA OFENSIVA
 
 ### 2.1 Lo que es real (agente Go `cmd/agent_go/`)
 
@@ -113,7 +113,7 @@ El motor YARA **sí** encuentra cosas en el binario real del agente (55 matches:
 
 **El repositorio se auto-mide:** `tools/probe_capabilities.py` sondea 206 capacidades contra la API en vivo y publica el veredicto (100 `real-ejecutada`, 30 `simulada`, 53 `no-disponible`, 22 `no-verificable`). Es una práctica honesta y poco común.
 
-### 2.2 Lo que es simulación — y lo que **finge** ser real
+### 2.2 Lo que es simulación - y lo que **finge** ser real
 
 🔴 **Cinco superficies devuelven éxito falso.** Este es el riesgo mayor del proyecto ofensivo: un operador que confíe en esos retornos creerá haber tirado credenciales cuando no ha pasado nada.
 
@@ -122,13 +122,13 @@ El motor YARA **sí** encuentra cosas en el binario real del agente (55 matches:
 | `orchestration/orchestrator_tool.py:328-346` | `_exec_plugin` imprime `[+] Plugin 'X' executed`, `exit_code: 0` para los 12 plugins ofensivos (`cred_dump`, `kerberoast`, `golden_ticket`, `silver_ticket`, `pass_the_ticket`, `proc_inject`…) **sin ejecutar nada**. `_exec_dotnet:311-326` **inventa** `"Assembly loaded in memory"`. `inject_process:348-395` abre el handle y **miente**: `"Memory allocated at 0x10000000"`, `"Thread created: 0x12345678"` |
 | `modules/privesc-auto/privesc_auto.py:134` | `{"ok": True, "simulated": True, "from": "USER", "to": "SYSTEM"}` **sin escalar** |
 | `modules/socks-proxy/socks_proxy.py:130` | `double_pivot_via_agent()` → `{"ok": True, ...}` sin pivotear |
-| `modules/phishingstrike/control-plane/infra-svc/cmd/server/destroy.go:86-95,113-131` | `/destroy` responde `{"status":"killed"}` — `ExecTerraformDestroy.Destroy` y `CloudflareSinkhole.RotateToSinkhole` hacen `return nil` **sin destruir nada**. Un kill-switch que dice «killed» y no mata es peor que no tener kill-switch |
+| `modules/phishingstrike/control-plane/infra-svc/cmd/server/destroy.go:86-95,113-131` | `/destroy` responde `{"status":"killed"}` - `ExecTerraformDestroy.Destroy` y `CloudflareSinkhole.RotateToSinkhole` hacen `return nil` **sin destruir nada**. Un kill-switch que dice «killed» y no mata es peor que no tener kill-switch |
 | `modules/lateral-rust/src/lateral/pth.rs:16-33` | Pass-the-hash computa la respuesta NTLMv2 contra un `server_challenge = [0u8;8]` **inventado**, ignora la respuesta (`let _response =`) y devuelve `Ok(true)`. `exec_command` devuelve `"Command executed on {target}"` sin ejecutar |
 | `modules/lateral-rust/src/credential/lsass.rs:192-204`, `sam.rs:43-44` | Devuelven **credenciales de prueba fijas** (`Password123`/`testuser`/`TESTDOMAIN`) como si fueran las extraídas del dump |
 
 🔴 **El catálogo miente sobre `webexploits`.** `module_catalog.go:376,378` afirma: *«las 26 funciones hacen peticiones HTTP REALES al objetivo»*. La realidad: **4** hacen HTTP de ataque (`ssi`, `ssrf`, `ssrf.IMDS`, `ssti`), **1** es stub (`xxe.Exploit` → `"xxe exploit not executed (compat stub)"`, etiquetada **"REAL"** en `webexploits_modules.go:478`), y **21** son heurística de strings (`sqli.ErrorBasedCheck` marca éxito con **cualquier HTTP 500**; `UnionCheck` con **cualquier 200**; `BlindCheck` con cualquier respuesta >1,5 s; `authbypass.JWTCheck` cuenta 3 puntos → acepta `alg:none`).
 
-🔴 **El gusano no propaga el payload.** `modules/lateral-rust/src/propagation/deployer.rs:44-92` (`try_wmi_deploy`/`try_psexec_deploy`/`try_dcom_deploy`) ejecuta **`"echo test"`**. El motor "propaga" sin propagar. Tampoco hay beacon de reporting: `HttpsBeacon` existe pero `propagation/worm.rs` nunca lo invoca — el C2 es unidireccional (operador → gusano), no hay retorno de infectados.
+🔴 **El gusano no propaga el payload.** `modules/lateral-rust/src/propagation/deployer.rs:44-92` (`try_wmi_deploy`/`try_psexec_deploy`/`try_dcom_deploy`) ejecuta **`"echo test"`**. El motor "propaga" sin propagar. Tampoco hay beacon de reporting: `HttpsBeacon` existe pero `propagation/worm.rs` nunca lo invoca - el C2 es unidireccional (operador → gusano), no hay retorno de infectados.
 
 🔴 **El worm del agente Go ignora los flags que le pasa el servidor.** `/api/worm/deploy` calcula `--max-depth`, `--threshold`, `--scope` (`handlers.go:2044-2050`) pero `worm_deploy.go:78` lanza el binario **sin argumentos**. El propio catálogo lo admite (`module_catalog.go:1576`).
 
@@ -137,22 +137,22 @@ El motor YARA **sí** encuentra cosas en el binario real del agente (55 matches:
 | Canal | Estado |
 |---|---|
 | **HTTP/HTTPS (Gin)** | ✅ **Único canal funcional**. `/agent/checkin`, `/agent/task/pending`, `/agent/task/result`, `/agent/key/exchange` |
-| DNS (`server/v3/dns`) | 🔴 **Código muerto** — `NewDNSListener` nunca se invoca. Sin cifrar, TXT fijo `id=%s;sleep=10;jitter=30` |
-| SOCKS (`server/v3/socks`) | 🔴 **Código muerto** en servidor; en el agente el comando `socks` sólo imprime *«SOCKS5 proxy simulado lab-only — dry-run»*. El SOCKS5 real es el inverso de `cmd/agent_go/socks.go` |
+| DNS (`server/v3/dns`) | 🔴 **Código muerto** - `NewDNSListener` nunca se invoca. Sin cifrar, TXT fijo `id=%s;sleep=10;jitter=30` |
+| SOCKS (`server/v3/socks`) | 🔴 **Código muerto** en servidor; en el agente el comando `socks` sólo imprime *«SOCKS5 proxy simulado lab-only - dry-run»*. El SOCKS5 real es el inverso de `cmd/agent_go/socks.go` |
 | WebSocket (`server/v3/websocket`) | 🔴 **Código muerto**. `CheckOrigin: return true` → CSWSH total si se cablea |
 | Armory / BOF | 🔴 **Código muerto**. `bof.Execute` dice literalmente *«In a real implementation, this would: 1. Allocate executable memory…»* y luego `// Simulated execution` |
 
-**Debilidad de seguridad propia del C2 (crítica):** el plano del agente opera **sin autenticación real** en el único modo funcional. El primer beacon no tiene clave AES, así que requiere `C2_ALLOW_CLEARTEXT_AGENT=1` — y en ese modo el `session_id` (elegido por el cliente, formato `<hostname>_<8 hex>`) es el único token. Consecuencia: **secuestro de sesión** (UPSERT sobrescribe hostname/IP del cliente en la DB y en la GUI del operador), **robo de tareas pendientes** (`GET /agent/task/pending?session_id=`), **inyección de resultados falsos**.
+**Debilidad de seguridad propia del C2 (crítica):** el plano del agente opera **sin autenticación real** en el único modo funcional. El primer beacon no tiene clave AES, así que requiere `C2_ALLOW_CLEARTEXT_AGENT=1` - y en ese modo el `session_id` (elegido por el cliente, formato `<hostname>_<8 hex>`) es el único token. Consecuencia: **secuestro de sesión** (UPSERT sobrescribe hostname/IP del cliente en la DB y en la GUI del operador), **robo de tareas pendientes** (`GET /agent/task/pending?session_id=`), **inyección de resultados falsos**.
 
-**Claves de sesión reales en claro en disco:** verificado en `build/c2-dect.db` (19 MB) — claves privadas ECDH y claves AES-256 de implantes en texto plano, porque `SQLCIPHER_KEY` es **opcional** y el KDF es `SHA-256(passphrase)` sin salt.
+**Claves de sesión reales en claro en disco:** verificado en `build/c2-dect.db` (19 MB) - claves privadas ECDH y claves AES-256 de implantes en texto plano, porque `SQLCIPHER_KEY` es **opcional** y el KDF es `SHA-256(passphrase)` sin salt.
 
 **El despliegue «de producción» desactiva la seguridad:** `docker-compose.prod.yml:109-122` → `--http`, `C2_ALLOW_HTTP=1`, `C2_ALLOW_NO_MTLS=1`, `C2_ALLOW_SELF_SIGNED=1`, admin con la password del `.env` publicada, puerto 8443 publicado sin TLS. `build/Dockerfile` deja `C2DECT_LAB=1` en la imagen final.
 
-### 2.4 Lo que le falta a c2-dect ofensivamente — lista priorizada
+### 2.4 Lo que le falta a c2-dect ofensivamente - lista priorizada
 
 | # | Ausencia | Verificación |
 |---|---|---|
-| 1 | **Sin BOF real** | `server/v3/bof/bof.go:163-190` — simulado + el paquete no lo importa nadie |
+| 1 | **Sin BOF real** | `server/v3/bof/bof.go:163-190` - simulado + el paquete no lo importa nadie |
 | 2 | **Sin process hollowing expuesto** | `cmd/agent_go/process_hollowing.go:236` implementa `HollowProcess` **completo y real** (`NtUnmapViewOfSection`, `NtAllocateVirtualMemory`, parseo PE64) pero **no hay `case "hollow"` en el switch** y nadie lo llama. Mismo caso `InjectReflectiveDLL` |
 | 3 | **Sin ADS** (Alternate Data Streams) | grep de `AlternateDataStream`/`NTFS_ALTERNATE` → 0 |
 | 4 | **Sin pivoting SMB por named pipes** | El pivote real es SOCKS5 inverso. `modules/lateral/` es **una cabecera de 169 líneas sin `.cpp`** |
@@ -177,8 +177,8 @@ El motor YARA **sí** encuentra cosas en el binario real del agente (55 matches:
 | `/api/modules/{ransomware,worm,kernel,lateral,privesc,adversary}-sim` | ✅ política firmada | ✅ lab contenido (`.lab-allow`) |
 | **`/api/modules/webexploits`** | 🔴 **ninguno** | 🔴 **ninguna** → el C2 envía payloads de ejecución de comando y SSRF a **cualquier URL http(s)** |
 | **`/api/modules/discovery`** | 🔴 ninguno | 🔴 ninguna → `nmap -sn <cidr>` y `Invoke-BloodHound` contra cualquier destino |
-| **`/api/modules/collection`** | 🔴 ninguno | — opera sobre el host del C2: lectura/cifrado arbitrario de ficheros (`paths`/`path` sin sanear → `os.ReadFile` directo) |
-| **`/api/modules/creds`** | 🔴 ninguno | — roba tokens del host del C2 |
+| **`/api/modules/collection`** | 🔴 ninguno | - opera sobre el host del C2: lectura/cifrado arbitrario de ficheros (`paths`/`path` sin sanear → `os.ReadFile` directo) |
+| **`/api/modules/creds`** | 🔴 ninguno | - roba tokens del host del C2 |
 
 Otros problemas: `AGENT-EXEC` es una **constante estática replayable** (`agent_command_gate.go:45`), no ligada a tarea/operador; los `args` de las tareas no se validan (`_ = args`, línea 201); `requireOffensiveLicense` está **muerta** (`jwt_claims` nunca se setea, `Claims` no tiene `tier`) → toda operación ofensiva de tools devuelve 401 y el modelo de licencias no existe de facto.
 
@@ -196,24 +196,24 @@ Extraídos con `strings` sobre el binario recién compilado (16.6 MB):
 | `fodhelper` | 5 | UAC bypass (`capabilities.go:606`) |
 | `EtwEventWrite` | 3 | Patch de ETW (`etw_patch.go`) |
 | `AmsiScanBuffer` | 1 | Patch de AMSI (`amsi_bypass.go`) |
-| `Chrome/126` | 1 | UA hardcodeado (`main.go:39`) — coincide con la regla propia `c2lab-v3-agent-checkin-path.yml` |
+| `Chrome/126` | 1 | UA hardcodeado (`main.go:39`) - coincide con la regla propia `c2lab-v3-agent-checkin-path.yml` |
 | `svchost.exe` | 1 | Nombre del worm |
 | `mimikatz` | 1 | En la ruta de Kerberoast |
 
-Además, en el repo: **35 reglas Sigma propias** en `infra/phase0/sigma/rules/` que detectan al propio agente (sleepmask NOACCESS, DPAPI key custody, check-in path, jitter uniforme, Run key a directorio escribible, DNS tunneling, lateral, kerberoast, LSASS). Su `baseline-report-real.md` declara OPSEC **70/100 — «C (ruidoso)»** y EDR **0/3 detecciones**.
+Además, en el repo: **35 reglas Sigma propias** en `infra/phase0/sigma/rules/` que detectan al propio agente (sleepmask NOACCESS, DPAPI key custody, check-in path, jitter uniforme, Run key a directorio escribible, DNS tunneling, lateral, kerberoast, LSASS). Su `baseline-report-real.md` declara OPSEC **70/100 - «C (ruidoso)»** y EDR **0/3 detecciones**.
 
 **Ironía arquitectónica:** c2-dect trae un detector de sí mismo mejor calibrado que el EDR que se supone que lo detecta.
 
 ---
 
-## 3. SentryGuard-0.0.1 — AUDITORÍA DEFENSIVA
+## 3. SentryGuard-0.0.1 - AUDITORÍA DEFENSIVA
 
 ### 3.1 Telemetría: **no existe en el camino de producción**
 
 | Fuente | Estado |
 |---|---|
 | Driver kernel (WDM) | 16 ficheros C, 13 IOCTLs, **pero sin `.vcxproj`/`.inf`/Makefile** → **no compila desde el repo**; `SgNetworkInitialize`, `SgMinifilterInitialize`, `SgInjectionDetect*`, `SgSecurityMonitorPrivilege`, `SgGetUserName`, `SgHashBuffer` tienen **0 call-sites**; `NetworkEnable=FALSE`, `MemoryEnable=FALSE`; **8 de 22** tipos de evento alcanzables; ~17 bugs funcionales (timestamp epoch-1601 con error de 369 años, ACL inexistente en el device object, `PsReferencePrimaryToken` a IRQL incorrecto, offset fijo `EPROCESS+0x5A8`, `RtlInitializeCriticalSection` sobre una `LIST_ENTRY`, `RegNtPreOpenKey` reportado como CREATE_KEY…) |
-| Cliente .NET del driver | `SentryGuardIoctls.cs` (26 KB) — **código muerto**: `SentryGuard.Sources.Windows` no lo referencia ningún `.csproj` de producto. Además el protocolo está roto en 3 puntos (offset inicial 16 vs 24, stride fijo 5816 vs `header.Size`, skips de struct 24/28 vs 32/60/30) |
+| Cliente .NET del driver | `SentryGuardIoctls.cs` (26 KB) - **código muerto**: `SentryGuard.Sources.Windows` no lo referencia ningún `.csproj` de producto. Además el protocolo está roto en 3 puntos (offset inicial 16 vs 24, stride fijo 5816 vs `header.Size`, skips de struct 24/28 vs 32/60/30) |
 | ETW | 🔴 Inexistente (0 coincidencias de `TraceEvent`/`EventSource`/`EventPipe`) |
 | Windows Event Log | 🔴 Inexistente como fuente (sólo un consumidor puntual en `ADCSCertificateDetector`) |
 | Sysmon | 🔴 No se consume. Sólo se **falsa la forma** del evento (`channel: Microsoft-Windows-Sysmon/Operational`, `source: Sysmon`) |
@@ -245,15 +245,15 @@ Además, en el repo: **35 reglas Sigma propias** en `infra/phase0/sigma/rules/` 
 | **IoC en el endpoint** | 🔴 Sin gestión de reglas de firewall, sin sinkhole DNS, sin enforcement de hosts, sin integración AMSI, sin gestión de Sysmon, sin bloqueo BYOVD |
 
 **Código muerto peligroso:**
-- `CanaryRollback.cs` — nunca instanciado. Si se conectara: `ComputeSHA3` **es SHA-256**, `HealthCheckLoop:447-478` **revierte todos los canaries** (lsass.exe, sam, SYSTEM, bootmgr) si el health score < 0.7 (que baja si Defender no corre o el host está saturado), y `RevertRegistryKey:292-327` restaura con nombres inventados `Value0`, `Value1` → **corrompe el registro que dice restaurar**.
-- `SelfProtectionHardening.cs` — nunca instanciado. Stubs vacíos (`SetProcessIntegrityLevel`, `RemoveTokenPrivileges`, `SetProcessDEP`, `SetProcessASLR`), `NtSetInformationProcess(0x1D)` no es la marca de proceso crítico (→ BSOD si se conecta), `ProtectCriticalFiles` puede **autobloquear** el servicio (Deny+herencia protegida sin ACE para el SID del servicio), `ProtectServices` escribe un valor `FailureActions` que **no es un valor de registro** (es un binario bajo `...\Config`).
+- `CanaryRollback.cs` - nunca instanciado. Si se conectara: `ComputeSHA3` **es SHA-256**, `HealthCheckLoop:447-478` **revierte todos los canaries** (lsass.exe, sam, SYSTEM, bootmgr) si el health score < 0.7 (que baja si Defender no corre o el host está saturado), y `RevertRegistryKey:292-327` restaura con nombres inventados `Value0`, `Value1` → **corrompe el registro que dice restaurar**.
+- `SelfProtectionHardening.cs` - nunca instanciado. Stubs vacíos (`SetProcessIntegrityLevel`, `RemoveTokenPrivileges`, `SetProcessDEP`, `SetProcessASLR`), `NtSetInformationProcess(0x1D)` no es la marca de proceso crítico (→ BSOD si se conecta), `ProtectCriticalFiles` puede **autobloquear** el servicio (Deny+herencia protegida sin ACE para el SID del servicio), `ProtectServices` escribe un valor `FailureActions` que **no es un valor de registro** (es un binario bajo `...\Config`).
 - `SandboxAnalyzer.cs:240-289` **ejecuta la muestra en el host del EDR** (`Process.Start`), dos veces. Riesgo de auto-infección.
 
 ### 3.4 Autenticación y autorización
 
 - **RBAC: no existe.** 0 resultados de `RequireRole|AddPolicy|Roles =` en todo `src/`. El `Role` se emite como claim y se devuelve en `/me`, pero **nunca se evalúa**. `docs/COMPLIANCE.md:7` afirma «Acceso basado en roles» y `docs/API.md:86` documenta un `403 rol insuficiente`. **Ambas afirmaciones son falsas.**
 - **RLS inoperante.** Las políticas se crean (`DbInitializer.cs:19-40`) pero: falta `FORCE ROW LEVEL SECURITY` (en PostgreSQL el owner ignora RLS), `app.tenant_id` **nunca se fija** por request, `TenantId` **nunca se propaga** a Events/Detections, `Indicators` queda fuera del perímetro, y el despliegue documentado conecta con el owner de la BD.
-- **Secretos por defecto que pasan el guard fail-fast.** El guard (`Program.cs:72-78`) exige ≥32 bytes y rechaza la cadena literal `dev-only-signing-key-change-me`. Pero `.env.example:11` trae `sentryguard-prod-change-me-64chars-…` y `deployment/docker-compose.yml:64` trae `sentryguard-production-change-me-…` — **ambos pasan el check de producción**. También `Seed__AdminPassword=SentryGuard2026!` y `Seed__EnableTotp=false`. Con la `Jwt:Key` por defecto **se forja un token admin**.
+- **Secretos por defecto que pasan el guard fail-fast.** El guard (`Program.cs:72-78`) exige ≥32 bytes y rechaza la cadena literal `dev-only-signing-key-change-me`. Pero `.env.example:11` trae `sentryguard-prod-change-me-64chars-…` y `deployment/docker-compose.yml:64` trae `sentryguard-production-change-me-…` - **ambos pasan el check de producción**. También `Seed__AdminPassword=SentryGuard2026!` y `Seed__EnableTotp=false`. Con la `Jwt:Key` por defecto **se forja un token admin**.
 - **`Agents__RegistrationKey=change-me-registration-key-32chars`** pasa el check de ≥8 chars → **cualquier agente puede auto-registrarse**. Y el re-registro por hostname **secuestra** cualquier host ya registrado (`AgentEndpoints.cs:25-42`) emitiendo un token nuevo a quien presente la key.
 - **`/api/agents/{id}/checkin` sin autenticación** (`AgentEndpoints.cs:72-98`) → cualquiera puede marcar agentes como Online, sobrescribir `Os`/`Arch`/`AgentVersion` e **inflar `EventsSent`**.
 - **Hub SignalR abierto** (`Program.cs:185`, sin `[Authorize]`) → fuga hostnames y estados de detección.
@@ -272,7 +272,7 @@ Además, en el repo: **35 reglas Sigma propias** en `infra/phase0/sigma/rules/` 
 - OpenTelemetry: **sólo `AddConsoleExporter()`** ⇒ la instrucción de apuntar `OTEL_EXPORTER_OTLP_ENDPOINT` no hace nada.
 - Logs: sólo consola; la sección `"Serilog"` de `appsettings.json` es **inerte** (falta `ReadFrom.Configuration()`). `RequestLoggingMiddleware` **sólo registra ≥400** ⇒ no hay auditoría de acciones privilegiadas.
 
-### 3.6 El motor de reglas — bugs con impacto medido
+### 3.6 El motor de reglas - bugs con impacto medido
 
 | # | Bug | Impacto medido |
 |---|---|---|
@@ -283,7 +283,7 @@ Además, en el repo: **35 reglas Sigma propias** en `infra/phase0/sigma/rules/` 
 | 5 | **640 reglas con nodos `selection_list`** no deserializan (el mapa Sigma crudo `"Image\|endswith": [...]` no tiene propiedad) → `Field=null` → `Expression.Constant(false)` | Muertas silenciosamente |
 | 6 | **144 reglas con `negation`** usan la clave `"item"` (singular); `RuleReader` sólo lee `"items"` → rama negada descartada → `AND false` | Muertas silenciosamente |
 | 7 | **Unión: 958 / 3.085 = 31,1 % de reglas Sigma permanentemente muertas** (210 disabled + 640 selection_list + 144 negation + 176 árbol vacío). Sin un solo log | Cobertura real ≈ 2.127 |
-| 8 | **MITRE enrichment: 19 técnicas hardcodeadas** (`MitreEnricher.cs:147-292`) — no existe `mitre_map.json` | El CLI imprime `(?)` en la mayoría de las detecciones |
+| 8 | **MITRE enrichment: 19 técnicas hardcodeadas** (`MitreEnricher.cs:147-292`) - no existe `mitre_map.json` | El CLI imprime `(?)` en la mayoría de las detecciones |
 | 9 | **IDs de sub-técnica con guion** (`T1003-001`) en vez de punto (`T1003.001`) | **14 de 404** IDs resuelven (3,5 %). 234 reglas usan el formato inválido |
 | 10 | **`AlertFactory` no parsea `"isolate_host"`** (enum `IsolateHost`) | Se pierde **exactamente** la acción de aislamiento más importante |
 | 11 | **`CorrelationEngine` no tiene estado** (`Correlate()` sólo ve el evento actual) | Las 7 correlaciones son intra-evento. **La cadena «proceso → persistencia → beacon» no es detectable.** `CORR_003` (T1570) y `CORR_004` (T1059.001) **nunca pueden dispararse** (IDs inexistentes en el catálogo) |
@@ -309,12 +309,12 @@ Además, en el repo: **35 reglas Sigma propias** en `infra/phase0/sigma/rules/` 
 | `src/SentryGuard.Sources/scenarios.json` | 12 escenarios (9 ataque + 3 benigno), **todos fabricados**, todos con `channel: Microsoft-Windows-Sysmon/Operational`, `source: Sysmon` |
 | `events.jsonl` | 12 líneas (9 plantillas repetidas) |
 | `events-scan.jsonl` | 60 líneas (las mismas 12 plantillas) |
-| `c2-dect-test.jsonl` | **5 líneas** — el «test contra c2-dect» del proyecto entero |
+| `c2-dect-test.jsonl` | **5 líneas** - el «test contra c2-dect» del proyecto entero |
 | `agents/go/internal/collector/demo.go` | generador `demo-collector-N` |
 
 **77 líneas de JSONL escritas a mano. Cero eventos capturados de un sistema real.** El `winlog.channel` y el `winlog.event_id` que dirigen la detección los elige **el simulador**, no el sistema operativo (`ScenarioCatalog.cs:29-30` → `DetectionRunner.cs:35-37`).
 
-Las 5 líneas de `c2-dect-test.jsonl` son 5Ian greys genéricos (PowerShell download cradle, `mimikatz.exe`, `reg add .../Run`, `rundll32 javascript:`, ScriptBlock 4104) — **no reflejan los artefactos reales del agente c2-dect** (`WinDefendUpdate`, `svchost.exe` en AppData, `c2-dect\data`, AES-GCM, UA Chrome/126).
+Las 5 líneas de `c2-dect-test.jsonl` son 5Ian greys genéricos (PowerShell download cradle, `mimikatz.exe`, `reg add .../Run`, `rundll32 javascript:`, ScriptBlock 4104) - **no reflejan los artefactos reales del agente c2-dect** (`WinDefendUpdate`, `svchost.exe` en AppData, `c2-dect\data`, AES-GCM, UA Chrome/126).
 
 ---
 
@@ -334,14 +334,14 @@ Las 5 líneas de `c2-dect-test.jsonl` son 5Ian greys genéricos (PowerShell down
 | **T1106 Syscalls directos** | ✅ blob Go con tabla cifrada | `APIUnhookingDetector` = switch sobre `evt.EventType` que nadie produce | ❌ | ❌ |
 | **T1055.012 Process hollowing** | ✅ `ultra/hollowing` (real, aunque con args mal ordenados) | `FilelessMalwareDetector.DetectProcessHollowing` = tabla de 4 pares padre→hijo | ❌ | ❌ |
 | **T1027 Sleep masking (ChaCha+NOACCESS)** | ✅ `sleepmask.go` | ❌ Ninguna regla Sigma lo cubre | ❌ | ❌ |
-| **T1113 Captura de pantalla** | ✅ `screenshot.go` | — | ❌ | ❌ |
-| **T1056 / T1115 Keylogger** | ✅ hilo `GetAsyncKeyState` → `c2-dect\data\keylogs\keylog.txt` | — | 🔴 Sin telemetría de ficheros | ❌ |
+| **T1113 Captura de pantalla** | ✅ `screenshot.go` | - | ❌ | ❌ |
+| **T1056 / T1115 Keylogger** | ✅ hilo `GetAsyncKeyState` → `c2-dect\data\keylogs\keylog.txt` | - | 🔴 Sin telemetría de ficheros | ❌ |
 | **T1486 Ransomware** | ✅ AES-256-GCM real (lab-gated) | Sigma T1486 (18) + YARA T1486 (28) | ✅ **la mejor cobertura relativa** | ✅ *(relativo)* |
-| **T1490 Shadow copy deletion** | ⚠️ No implementado en c2-dect | `ImpairDefensesDetector` — grep `vssadmin`/`shadowcopy` → **0** | ❌ | ❌ |
-| **T1562.004 Firewall disable** | — | `ImpairDefensesDetector` sólo matchea el literal exacto `netsh advfirewall set allprofiles state off` | ⚠️ | ⚠️ Literal, no semántico |
+| **T1490 Shadow copy deletion** | ⚠️ No implementado en c2-dect | `ImpairDefensesDetector` - grep `vssadmin`/`shadowcopy` → **0** | ❌ | ❌ |
+| **T1562.004 Firewall disable** | - | `ImpairDefensesDetector` sólo matchea el literal exacto `netsh advfirewall set allprofiles state off` | ⚠️ | ⚠️ Literal, no semántico |
 | **T1570 / T1021 Movimiento lateral** | ✅ WMI/PsExec/WinRM/DCOM/BITS/RDP/SMB relay | `LivingOffTheLand.DetectLateralMovement` (el mejor) | ⚠️ | ⚠️ |
 | **T1583 / T1071 Red infra** | ✅ redirector con cloaking JA4/GeoIP/ASN | `NetworkThreatDetector` (sin JA3/JA4, sin SNI, sin cert) | 🔴 | ❌ |
-| **T1555 DPAPI key custody** | ✅ `CryptProtectData` | — | ❌ | ❌ |
+| **T1555 DPAPI key custody** | ✅ `CryptProtectData` | - | ❌ | ❌ |
 
 **Resultado agregado: de 20 técnicas representativas, SentryGuard detecta 1 de forma fiable, 4 parcialmente, y 0 en producción.**
 
@@ -349,7 +349,7 @@ Las 5 líneas de `c2-dect-test.jsonl` son 5Ian greys genéricos (PowerShell down
 
 ## 5. PLAN DE ACCIÓN
 
-### 5.1 SentryGuard — P0 (sin esto no hay EDR) — ~2 semanas
+### 5.1 SentryGuard - P0 (sin esto no hay EDR) - ~2 semanas
 
 | # | Acción | Esfuerzo |
 |---|---|---|
@@ -362,7 +362,7 @@ Las 5 líneas de `c2-dect-test.jsonl` son 5Ian greys genéricos (PowerShell down
 | 7 | **Secretos**: eliminar los defaults que pasan el guard fail-closed (`.env.example`, `docker-compose.yml`), exigir `Agents__RegistrationKey` aleatorio, `Seed__EnableTotp=true` por defecto con entrega del secreto TOTP, y **RBAC de verdad** (`RequireRole` en las acciones sensibles) | S |
 | 8 | **TLS en el plano de control** + `RequireAuthorization()` en `checkin` + `FORCE ROW LEVEL SECURITY` + `SET LOCAL app.tenant_id` por request | S |
 
-### 5.2 SentryGuard — P1 (operación y honestidad) — ~1 mes
+### 5.2 SentryGuard - P1 (operación y honestidad) - ~1 mes
 
 - **Capturar telemetría real** de un Windows de pruebas con Sysmon/ETW y sustituir `events-scan.jsonl` por una captura auténtica. Es el cambio con mayor retorno de credibilidad por hora de trabajo.
 - **Etiquetar el modo demo** (`IsSynthetic = true`) y propagarlo al payload de ingestión: hoy un `mimikatz.exe` simulado es indistinguible de uno real en la BD.
@@ -376,7 +376,7 @@ Las 5 líneas de `c2-dect-test.jsonl` son 5Ian greys genéricos (PowerShell down
 - **Deploy**: el `Dockerfile` está roto (falta `SentryGuard.Metrics` en el contexto de build ⇒ `dotnet restore` falla) y el chart Helm no arranca (sin `Jwt__Key`/`Agents__RegistrationKey`, Secret de Postgres inexistente). CI sin SAST/dependencias/secretos/firma/SBOM.
 - **Corregir la documentación**: ≥20 afirmaciones materiales en `docs/` son falsas (RBAC, mTLS, OTLP, SLO, threat-intel scoring, `health/ready`, refresh-reuse, filtros de `status`).
 
-### 5.3 c2-dect — P0 (credibilidad y responsabilidad) — ~1 mes
+### 5.3 c2-dect - P0 (credibilidad y responsabilidad) - ~1 mes
 
 | # | Acción |
 |---|---|
@@ -394,7 +394,7 @@ Las 5 líneas de `c2-dect-test.jsonl` son 5Ian greys genéricos (PowerShell down
 | 12 | **Rotar el `AGENT-EXEC`** a token de un solo uso ligado a tarea/operador/sesión, y validar `args` |
 | 13 | **Corregir el catálogo**: `Grade: "real"` en 9 familias de `webexploits` que son heurística/stub; `xxe.Exploit` etiquetado «REAL» cuando devuelve «compat stub»; «las 26 funciones hacen peticiones HTTP REALES» cuando son 4 |
 
-### 5.4 c2-dect — P1 (madurez ofensiva) — ~3 meses
+### 5.4 c2-dect - P1 (madurez ofensiva) - ~3 meses
 
 - Implementar BOF real (o borrarlo del árbol); exponer `HollowProcess` y `InjectReflectiveDLL` en el switch del agente; ADS; pivoting SMB por named pipes; exfiltración real por canal; Startup folder / IFEO / AppInit_DLLs; Kerberoast + DCSync en `lateral-rust`; SSH lateral; canales C2 no-HTTP (DNS/WS/SMB); drenaje de ruido y prefijo de ruta configurable.
 - Compilar `ultra/` y `pic-asm/` o moverlos a `experimental/` (hoy `signature-evasion/README.md` documenta un `core/src/evasion_core.c` **que no existe**).
@@ -406,9 +406,9 @@ Las 5 líneas de `c2-dect-test.jsonl` son 5Ian greys genéricos (PowerShell down
 
 ## 6. RESUMEN EJECUTIVO FINAL
 
-**c2-dect** es dos proyectos superpuestos: (1) un **arsenal ofensivo real** en `cmd/agent_go/` y `modules/lateral-rust/` —Kerberoast, DCSync, forja de tickets, WMI/PsExec/WinRM/DCOM/BITS/RDP, SMB relay, LSASS/SAM/DPAPI, UAC bypass, AMSI/ETW/unhooking, sleepmask, pivot SOCKS5, ransomware— y (2) un **simulador defensivo maduro y criptográficamente serio** (ransomware-sim, worm-sim, phishingstrike en su parte de gobernanza, reconocimiento-c2). Su riesgo principal no es lo que hace sino **lo que dice que hace**: 5 superficies devuelven éxito falso y 2 devuelven credenciales de prueba.
+**c2-dect** es dos proyectos superpuestos: (1) un **arsenal ofensivo real** en `cmd/agent_go/` y `modules/lateral-rust/` -Kerberoast, DCSync, forja de tickets, WMI/PsExec/WinRM/DCOM/BITS/RDP, SMB relay, LSASS/SAM/DPAPI, UAC bypass, AMSI/ETW/unhooking, sleepmask, pivot SOCKS5, ransomware- y (2) un **simulador defensivo maduro y criptográficamente serio** (ransomware-sim, worm-sim, phishingstrike en su parte de gobernanza, reconocimiento-c2). Su riesgo principal no es lo que hace sino **lo que dice que hace**: 5 superficies devuelven éxito falso y 2 devuelven credenciales de prueba.
 
-**SentryGuard-0.0.1** tiene un motor de reglas real (3.085 Sigma + 5.934 YARA, correlación, enriquecimiento MITRE, telemetría, métricas) pero **no tiene plataforma**: la telemetría es sintética, el driver no compila y no está cableado, el protocolo IOCTL está roto, los 26 ficheros de detectores avanzados son código muerto, la correlación no tiene estado, la acción de aislamiento no parsea, el SLO nunca puede breachar, no hay RBAC, no hay TLS, los secretos por defecto pasan el guard fail-closed, y el 31 % de las reglas Sigma está muerta en silencio. **Contra un c2-dect real: no lo vería, y si lo viera no podría hacer nada.** El panel que se observa está lleno con las 350 detecciones que el propio servidor siembra (`DbInitializer.cs:92-117`) — lo que además crea una **falsa sensación de cobertura**.
+**SentryGuard-0.0.1** tiene un motor de reglas real (3.085 Sigma + 5.934 YARA, correlación, enriquecimiento MITRE, telemetría, métricas) pero **no tiene plataforma**: la telemetría es sintética, el driver no compila y no está cableado, el protocolo IOCTL está roto, los 26 ficheros de detectores avanzados son código muerto, la correlación no tiene estado, la acción de aislamiento no parsea, el SLO nunca puede breachar, no hay RBAC, no hay TLS, los secretos por defecto pasan el guard fail-closed, y el 31 % de las reglas Sigma está muerta en silencio. **Contra un c2-dect real: no lo vería, y si lo viera no podría hacer nada.** El panel que se observa está lleno con las 350 detecciones que el propio servidor siembra (`DbInitializer.cs:92-117`) - lo que además crea una **falsa sensación de cobertura**.
 
 **Los dos proyectos miden honestamente lo que no hacen** (c2-dect con `probe_capabilities.py`; SentryGuard con `scorer.py` que se niega a fabricar un 100). El problema es que esa honestidad es **por componentes**, no **por producto**: cada componente sabe lo que es, pero el ensamblaje afirma capacidades que ningún camino de ejecución sostiene.
 

@@ -1,0 +1,7 @@
+[
+  {"host": "h1", "pid": 100, "event_type": "param_poison", "t": 1.0},
+  {"host": "h1", "pid": 100, "event_type": "peb_rx", "t": 2.0},
+  {"host": "h1", "pid": 100, "event_type": "thread_hijack", "t": 3.0},
+  {"host": "h2", "pid": 200, "event_type": "param_poison", "t": 10.0},
+  {"host": "h2", "pid": 200, "event_type": "peb_rx", "t": 80.0}
+]

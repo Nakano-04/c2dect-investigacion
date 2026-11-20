@@ -60,7 +60,7 @@ C2-DECT es una plataforma de simulacion de adversarios de extremo a extremo (acc
 ### Vector 4 - Transporte: TLS / mTLS / listener
 **Estado: remediado por defecto; escape hatches de laboratorio.**
 
-- Listener por defecto `127.0.0.1:8443` (`server/cmd/main.go:30`). Antes era `0.0.0.0:8443` (server antiguo) / `0.0.0.0:443` (`cmd/server/main.go:20` — revisar: este mantiene `0.0.0.0:443`, ver nota abajo).
+- Listener por defecto `127.0.0.1:8443` (`server/cmd/main.go:30`). Antes era `0.0.0.0:8443` (server antiguo) / `0.0.0.0:443` (`cmd/server/main.go:20` - revisar: este mantiene `0.0.0.0:443`, ver nota abajo).
 - `--http` (TLS deshabilitado) requiere `C2_ALLOW_HTTP=1` (`main.go:175-177`).
 - Cert autofirmado solo con `C2_ALLOW_SELF_SIGNED=1` (`main.go:238-242`).
 - mTLS cliente fail-closed: cert+key o ninguno (`cmd/agent_go/mtls.go:11`); servidor rechaza allowlist vacia salvo `C2_ALLOW_NO_MTLS_ALLOWLIST=1` (`server/cmd/mtls.go:54-55`).

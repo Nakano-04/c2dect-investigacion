@@ -1,4 +1,4 @@
-# 01 — Modelo de amenaza del adversario emulado
+# 01 - Modelo de amenaza del adversario emulado
 
 ## Activos en el laboratorio
 
@@ -15,9 +15,9 @@
 Perfil emulado: actor con acceso inicial limitado, capacidades de post-explotación
 y un objetivo de reconocimiento/impacto. Se modelan tres niveles:
 
-1. **Oportunista** — acceso inicial, descubrimiento básico, beaconing.
-2. **Organizado** — post-explotación, movimiento lateral, persistencia.
-3. **APT (laboratorio)** — cadenas completas con gobernanza (RoE, kill-date,
+1. **Oportunista** - acceso inicial, descubrimiento básico, beaconing.
+2. **Organizado** - post-explotación, movimiento lateral, persistencia.
+3. **APT (laboratorio)** - cadenas completas con gobernanza (RoE, kill-date,
    techo de tiempo, escala).
 
 ## Supuestos

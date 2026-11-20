@@ -57,7 +57,7 @@ def score(tecnicas: list[dict]) -> dict:
 
 def render_markdown(result: dict) -> str:
     lines = [
-        "# Informe OPSEC — observabilidad por tecnica",
+        "# Informe OPSEC - observabilidad por tecnica",
         "",
         f"Sensores asumidos: {', '.join(result['sensores_auditados'])}",
         "",

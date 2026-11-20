@@ -1,4 +1,4 @@
-# C2-DECT — Investigación
+# C2-DECT - Investigación
 
 Repositorio de **contenido y resultados** de investigación sobre C2-DECT, una
 plataforma de emulación de adversarios con C2 integrado para laboratorios de
@@ -16,10 +16,10 @@ sintéticas, `results.json` (con hashes SHA256) y CI que ejecuta las pruebas:
 
 | Repo | Prototipo |
 |---|---|
-| `c2dect-soc-validation` | `tt_calculator.py` — TTD/TTC, IC95%, comparación de brazos |
-| `c2dect-hardening` | `hardening_scan.py` — 7 reglas, severidades y ratchet de baseline |
-| `c2dect-unicorn-fuzzing` | `crash_triage.py` — dedupe, minimización, cobertura y reproducibilidad |
-| `c2dect-telemetry-dataset` | `dataset_tools.py` — sanitización, etiquetas, split y datasheet |
+| `c2dect-soc-validation` | `tt_calculator.py` - TTD/TTC, IC95%, comparación de brazos |
+| `c2dect-hardening` | `hardening_scan.py` - 7 reglas, severidades y ratchet de baseline |
+| `c2dect-unicorn-fuzzing` | `crash_triage.py` - dedupe, minimización, cobertura y reproducibilidad |
+| `c2dect-telemetry-dataset` | `dataset_tools.py` - sanitización, etiquetas, split y datasheet |
 
 Aquí, `verify_manifest.py` comprueba la integridad de todo el contenido:
 
@@ -41,18 +41,18 @@ cierre exige retest con evidencia.
 
 | Línea | Repo | Resultado |
 |---|---|---|
-| 4 — Validación de SOC con grupo de control | `c2dect-soc-validation` | Estudio de caso |
-| 5 — Hardening del propio C2 | `c2dect-hardening` | Harness + metodología |
-| 6 — Fuzzing/emulación con Unicorn | `c2dect-unicorn-fuzzing` | Benchmark + paper |
-| 7 — Dataset de telemetría etiquetado | `c2dect-telemetry-dataset` | Dataset + datasheet |
+| 4 - Validación de SOC con grupo de control | `c2dect-soc-validation` | Estudio de caso |
+| 5 - Hardening del propio C2 | `c2dect-hardening` | Harness + metodología |
+| 6 - Fuzzing/emulación con Unicorn | `c2dect-unicorn-fuzzing` | Benchmark + paper |
+| 7 - Dataset de telemetría etiquetado | `c2dect-telemetry-dataset` | Dataset + datasheet |
 
 ## Documentos incluidos
 
-- `PLANES_INVESTIGACION_4-7.md` — planes con hipótesis, métricas, experimentos y entregables.
-- `AUDITORIA_OFENSIVA_c2-dect_2026.md` — auditoría ofensiva estática (2026-10-30).
-- `AUDITORIA_OFENSIVA_c2-dect.md` — auditoría ofensiva previa (2025).
-- `AUDITORIA_DEFENSIVA_OFENSIVA.md` — auditoría defensiva/ofensiva.
-- `AUDITORIA_PROFUNDA_c2dect_vs_SentryGuard.md` — análisis comparativo.
+- `PLANES_INVESTIGACION_4-7.md` - planes con hipótesis, métricas, experimentos y entregables.
+- `AUDITORIA_OFENSIVA_c2-dect_2026.md` - auditoría ofensiva estática (2026-10-30).
+- `AUDITORIA_OFENSIVA_c2-dect.md` - auditoría ofensiva previa (2025).
+- `AUDITORIA_DEFENSIVA_OFENSIVA.md` - auditoría defensiva/ofensiva.
+- `AUDITORIA_PROFUNDA_c2dect_vs_SentryGuard.md` - análisis comparativo.
 
 ## Idea central
 

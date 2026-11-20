@@ -1,4 +1,4 @@
-# 05 — OPSEC como métrica de huella
+# 05 - OPSEC como métrica de huella
 
 ## Idea
 

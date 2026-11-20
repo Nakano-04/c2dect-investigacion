@@ -19,12 +19,23 @@ pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
-    b.installArtifact(addExe(b, "verify_manifest_zig", "src/main.zig", target, optimize));
-    b.installArtifact(addExe(b, "opsec_zig", "src/opsec.zig", target, optimize));
-    b.installArtifact(addExe(b, "bypass_audit_zig", "src/bypass_audit.zig", target, optimize));
+    const executables = [_][2][]const u8{
+        .{ "verify_manifest_zig", "src/main.zig" },
+        .{ "opsec_zig", "src/opsec.zig" },
+        .{ "bypass_audit_zig", "src/bypass_audit.zig" },
+        .{ "footprint_zig", "src/footprint.zig" },
+        .{ "correlate_zig", "src/correlate.zig" },
+        .{ "repro_zig", "src/repro.zig" },
+    };
+    for (executables) |spec| {
+        b.installArtifact(addExe(b, spec[0], spec[1], target, optimize));
+    }
 
     const test_step = b.step("test", "Run unit tests");
-    const sources = [_][]const u8{ "src/main.zig", "src/opsec.zig", "src/bypass_audit.zig" };
+    const sources = [_][]const u8{
+        "src/main.zig", "src/opsec.zig", "src/bypass_audit.zig",
+        "src/footprint.zig", "src/correlate.zig", "src/repro.zig",
+    };
     for (sources) |source| {
         const test_mod = b.createModule(.{
             .root_source_file = b.path(source),

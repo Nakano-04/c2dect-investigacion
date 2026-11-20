@@ -1,4 +1,4 @@
-# Ejecutable Zig — `verify_manifest_zig`
+# Ejecutable Zig - `verify_manifest_zig`
 
 Verificador de integridad del contenido del repo, escrito en Zig 0.17.1 sin
 dependencias externas. Comprueba los SHA256 declarados en `artifacts.sha256`.
@@ -35,3 +35,14 @@ de laboratorio. No implementa ninguna técnica de evasión.
 ```
 
 El protocolo y el catálogo de indicadores están en `OFENSIVA/07-bypass-auditable.md`.
+
+## Instrumentación adicional
+
+```powershell
+.\zig-out\bin\footprint_zig.exe fixtures\eventos.json
+.\zig-out\bin\correlate_zig.exe fixtures\p3_eventos.json 10
+.\zig-out\bin\repro_zig.exe 1.0 42 src\main.zig src\opsec.zig
+```
+
+`footprint_zig` coincide byte a byte con `footprint.py`; `repro_zig` emite un
+`build_id` reproducible. El análisis está en `OFENSIVA/08-zig-instrumento-auditable.md`.

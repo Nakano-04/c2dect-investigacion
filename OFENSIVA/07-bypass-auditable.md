@@ -1,4 +1,4 @@
-# 07 — Bypass auditable como técnica de medición
+# 07 - Bypass auditable como técnica de medición
 
 ## Planteamiento
 

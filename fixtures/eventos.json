@@ -1,0 +1,6 @@
+[
+  {"event_type": "process_create", "technique": "T1059"},
+  {"event_type": "memory_protect", "technique": "T1055"},
+  {"event_type": "process_create", "technique": "T1059"},
+  {"event_type": "thread_context", "technique": "T1055"}
+]

@@ -1,4 +1,4 @@
-# 03 — Cadena de ataque y puntos de observación
+# 03 - Cadena de ataque y puntos de observación
 
 La plataforma organiza la emulación en siete fases. Para cada fase se lista el
 punto de observación más temprano y el criterio de verdad que la valida.

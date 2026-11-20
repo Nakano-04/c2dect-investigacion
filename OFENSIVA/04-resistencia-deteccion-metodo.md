@@ -1,4 +1,4 @@
-# 04 — Resistencia a detección como propiedad medible
+# 04 - Resistencia a detección como propiedad medible
 
 ## Tesis
 

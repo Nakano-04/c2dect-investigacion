@@ -1,4 +1,4 @@
-# Capa ofensiva — marco de investigación
+# Capa ofensiva - marco de investigación
 
 Esta carpeta amplifica la dimensión ofensiva de C2-DECT como **objeto de
 estudio**, no como armamento. Todo el material es análisis, metodología y

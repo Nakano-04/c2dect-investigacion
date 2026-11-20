@@ -1,4 +1,4 @@
-# 06 — Hipótesis de brechas falsables
+# 06 - Hipótesis de brechas falsables
 
 Cada hipótesis se formula para poder ser refutada con datos.
 

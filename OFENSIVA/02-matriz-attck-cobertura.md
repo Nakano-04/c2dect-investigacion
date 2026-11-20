@@ -1,4 +1,4 @@
-# 02 — Matriz ATT&CK y cobertura de detección
+# 02 - Matriz ATT&CK y cobertura de detección
 
 ## Estado medido
 
@@ -25,11 +25,11 @@ Cada fila lleva: `tecnica ATT&CK`, `regla Sigma`, `táctica`, `hits`,
 
 ## Brechas prioritarias (hipótesis)
 
-1. **Evasión (T1055, T1629)** — indicadores estructurales requieren ETW-TI;
+1. **Evasión (T1055, T1629)** - indicadores estructurales requieren ETW-TI;
    sin ese sensor la cobertura cae a cero.
-2. **Beaconing (T1071.001)** — reglas de periodicidad existen pero no hay
+2. **Beaconing (T1071.001)** - reglas de periodicidad existen pero no hay
    tráfico etiquetado que las valide.
-3. **Acceso inicial** — las reglas están declaradas pero la campaña no ejecutó
+3. **Acceso inicial** - las reglas están declaradas pero la campaña no ejecutó
    esas técnicas.
 
 ## Entregable
