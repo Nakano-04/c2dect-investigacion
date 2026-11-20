@@ -1,0 +1,12 @@
+{
+  "sensor": "ETW-TI",
+  "catalog_sha256": "sintetico-no-hash-real",
+  "repeticiones": [
+    {"tecnica": "B-03", "visto": true},
+    {"tecnica": "B-03", "visto": true},
+    {"tecnica": "B-03", "visto": false},
+    {"tecnica": "B-03", "visto": true},
+    {"tecnica": "B-04", "visto": true},
+    {"tecnica": "B-04", "visto": false}
+  ]
+}
