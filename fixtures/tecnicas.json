@@ -1,0 +1,7 @@
+[
+  {"id": "T1059", "tactic": "Ejecucion", "signals": {"process": 3, "file": 1}, "sensors_assumed": ["process", "file"], "rule_coverage": 0.9},
+  {"id": "T1055", "tactic": "Evasion", "signals": {"memory": 3}, "sensors_assumed": ["process", "memory"], "rule_coverage": 0.1},
+  {"id": "T1071.001", "tactic": "C2", "signals": {"network": 2}, "sensors_assumed": ["network"], "rule_coverage": 0.6},
+  {"id": "T1021", "tactic": "Lateral", "signals": {"network": 2, "registry": 1}, "sensors_assumed": ["network", "registry"], "rule_coverage": 0.2},
+  {"id": "T1547", "tactic": "Persistencia", "signals": {"registry": 3, "file": 2}, "sensors_assumed": ["registry", "file"], "rule_coverage": 0.8}
+]

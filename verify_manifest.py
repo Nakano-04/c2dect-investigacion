@@ -13,7 +13,7 @@ import hashlib
 from pathlib import Path
 
 DEFAULT_MANIFEST = "artifacts.sha256"
-EXCLUDED = {".git", "__pycache__", DEFAULT_MANIFEST}
+EXCLUDED = {".git", "__pycache__", ".zig-cache", "zig-out", DEFAULT_MANIFEST}
 
 
 def sha256_file(path: Path) -> str:
