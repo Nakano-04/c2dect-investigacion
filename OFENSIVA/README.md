@@ -25,6 +25,9 @@ que no puede medirse no entra en el catálogo como «real».
 | 04 | `resistencia-deteccion-metodo.md` | Metodología para medir la detectabilidad como propiedad |
 | 05 | `opsec-como-metrica.md` | La huella operativa cuantificada (prototipo `opsec_score.py`) |
 | 06 | `hipotesis-brechas.md` | Hipótesis falsables sobre brechas de detección |
+| 07 | `bypass-auditable.md` | El bypass como técnica de medición, no como capacidad |
+| 08 | `zig-instrumento-auditable.md` | Por qué Zig mejora la evidencia, no el sigilo |
+| 09 | `plan-ejecucion-lab.md` | Plan para pasar de hipótesis a 6 técnicas ejecutadas |
 
 ## Prototipo verificable
 
