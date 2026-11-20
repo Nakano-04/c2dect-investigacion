@@ -4,9 +4,30 @@ Repositorio de **contenido y resultados** de investigación sobre C2-DECT, una
 plataforma de emulación de adversarios con C2 integrado para laboratorios de
 Red Team y validación de detección.
 
-> **Este repositorio no contiene código fuente.** Solo documentación, planes,
-> auditorías y resultados medibles. El código permanece en el entorno de
-> desarrollo privado.
+> **Este repositorio no contiene código fuente de C2-DECT.** Contiene
+> documentación, planes, auditorías, resultados medibles y **prototipos
+> pequeños y originales** de cada línea de investigación (sin dependencias del
+> framework). El código del framework permanece en su repositorio de desarrollo.
+
+## Prototipos propios (verificables)
+
+Cada repo de línea incluye un prototipo independiente con tests, fixtures
+sintéticas, `results.json` (con hashes SHA256) y CI que ejecuta las pruebas:
+
+| Repo | Prototipo |
+|---|---|
+| `c2dect-soc-validation` | `tt_calculator.py` — TTD/TTC, IC95%, comparación de brazos |
+| `c2dect-hardening` | `hardening_scan.py` — 7 reglas, severidades y ratchet de baseline |
+| `c2dect-unicorn-fuzzing` | `crash_triage.py` — dedupe, minimización, cobertura y reproducibilidad |
+| `c2dect-telemetry-dataset` | `dataset_tools.py` — sanitización, etiquetas, split y datasheet |
+
+Aquí, `verify_manifest.py` comprueba la integridad de todo el contenido:
+
+```powershell
+python -m unittest discover -v
+python verify_manifest.py
+python verify_manifest.py generate
+```
 
 ## Ámbito y uso autorizado
 
